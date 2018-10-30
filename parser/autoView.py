@@ -18,29 +18,41 @@ if __name__ == '__main__':
 	#for idx in range(1, 2):
 	for idx in range(1, 2000 + 1):
 
-		page = urllib.request.urlopen(baseURL.format(idx))
-		soup = BeautifulSoup(page, 'lxml')
-		soup = soup.find('div', class_ = 'article').find_all('li')
+		try:
 
-		for li in soup:
+			page = urllib.request.urlopen(baseURL.format(idx))
+			soup = BeautifulSoup(page, 'lxml')
+			soup = soup.find('div', class_ = 'article').find_all('li')
 
-			docURLs.append(li.find('a')['href'])
+			for li in soup:
+
+				docURLs.append(li.find('a')['href'])
+
+		except:
+
+			pass
 
 	for docURL in docURLs:
 
-		page = urllib.request.urlopen('http://www.autoview.co.kr' + docURL)
-		soup = BeautifulSoup(page, 'lxml')
-		
-		title = soup.find('h4').text.strip()
-		time = soup.find('div', class_ = 'article_info').getText().strip()[8:18]
+		try:
 
-		a = Article('http://www.autoview.co.kr' + docURL, language = 'ko')
-		a.download()
-		a.parse()
+			page = urllib.request.urlopen('http://www.autoview.co.kr' + docURL)
+			soup = BeautifulSoup(page, 'lxml')
+			
+			title = soup.find('h4').text.strip()
+			time = soup.find('div', class_ = 'article_info').getText().strip()[8:18]
 
-		mainText = a.text.strip().replace('\n', ' ')
+			a = Article('http://www.autoview.co.kr' + docURL, language = 'ko')
+			a.download()
+			a.parse()
 
-		docs.append({'title' : title, 'time' : time, 'content' : mainText})
+			mainText = a.text.strip().replace('\n', ' ')
+
+			docs.append({'title' : title, 'time' : time, 'content' : mainText})
+
+		except:
+
+			pass
 
 	with open('autiview_news.pickle', 'wb') as fs:
 

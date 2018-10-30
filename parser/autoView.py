@@ -29,7 +29,7 @@ if __name__ == '__main__':
 	for docURL in docURLs:
 
 		page = urllib.request.urlopen('http://www.autoview.co.kr' + docURL)
-		soup = BeautifulSoup(page, 'html')
+		soup = BeautifulSoup(page, 'lxml')
 		
 		title = soup.find('h4').text.strip()
 		time = soup.find('div', class_ = 'article_info').getText().strip()[8:18]

@@ -28,7 +28,7 @@ if __name__ == '__main__':
 	for docURL in docURLs:
 
 		page = urllib.request.urlopen('http://www.motorgraph.com' + docURL)
-		soup = BeautifulSoup(page, 'html')
+		soup = BeautifulSoup(page, 'lxml')
 		
 		title = soup.find('div', class_ = 'article-head-title').text.strip()
 		time = soup.find('div', class_ = 'info-text').find_all('li')[2].text.strip()[3:13]
@@ -67,7 +67,7 @@ if __name__ == '__main__':
 		comments = list()
 
 		page = urllib.request.urlopen(docURL)
-		soup = BeautifulSoup(page, 'html')
+		soup = BeautifulSoup(page, 'lxml')
 		
 		title = soup.find('h1', class_ = 'np_18px').text.split('            ')[1]
 		time = soup.find('span', class_ = 'reg-date').text.strip()[0:10]

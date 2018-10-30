@@ -23,7 +23,7 @@ if __name__ == '__main__':
 	#for idx in range(1, 566):
 
 		page = urllib.request.urlopen(baseURL.format(idx))
-		soup = BeautifulSoup(page, 'html')
+		soup = BeautifulSoup(page, 'lxml')
 		soup = soup.find('tbody').find_all('a', class_ = 'title')
 
 		for t in soup:
@@ -44,7 +44,7 @@ if __name__ == '__main__':
 		"""
 
 		page = urllib.request.urlopen(docURL)
-		soup = BeautifulSoup(page, 'html')
+		soup = BeautifulSoup(page, 'lxml')
 		
 		title = soup.find('a', class_ = 'title').text.strip()
 		time = soup.find('span', class_ = 'date').text.strip()[6:16]

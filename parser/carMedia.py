@@ -32,6 +32,8 @@ if __name__ == '__main__':
 
 	for docURL in docURLs:
 
+
+		"""
 		a = Article(docURL, language = 'ko')
 		a.download()
 		a.parse()
@@ -39,10 +41,8 @@ if __name__ == '__main__':
 		print(a.title)
 		print(a.date)
 		print(a.text)
-
-
-
 		"""
+
 		page = urllib.request.urlopen(docURL)
 		soup = BeautifulSoup(page, 'html')
 		
@@ -52,8 +52,6 @@ if __name__ == '__main__':
 
 		soup = soup.find('div', class_ = 'boardReadBody').find('div')
 		rows = soup.find('div').find_all('div')
-
-		#print(len(rows), '\n')
 
 		if len(rows) == 0:
 
@@ -68,14 +66,8 @@ if __name__ == '__main__':
 			except:
 
 				pass
-			
 
 			mainText = mainText + row.getText()
-
-		print(mainText)
-		print('\n\n')
-
-		"""
 
 		docs.append({'title' : title, 'time' : time, 'content' : mainText})
 

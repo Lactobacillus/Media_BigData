@@ -15,8 +15,8 @@ if __name__ == '__main__':
 	docs = list()
 	baseURL = 'http://www.autoview.co.kr/content/news/news_total_list.asp?page={}'
 	
-	for idx in range(1, 2):
-	#for idx in range(1, 2000 + 1):
+	#for idx in range(1, 2):
+	for idx in range(1, 2000 + 1):
 
 		page = urllib.request.urlopen(baseURL.format(idx))
 		soup = BeautifulSoup(page, 'lxml')
@@ -45,6 +45,8 @@ if __name__ == '__main__':
 	with open('autiview_news.pickle', 'wb') as fs:
 
 		pickle.dump(docs, fs)
+
+	"""
 
 	# 구매가이드 (시승기)
 	docURLs = list()
@@ -96,7 +98,7 @@ if __name__ == '__main__':
 	docURLs = list()
 	docs = list()
 	baseURL = 'http://www.autoview.co.kr/bbs/board.asp?page={}&news_section=qna'
-
+	
 
 
 
@@ -108,3 +110,4 @@ if __name__ == '__main__':
 	with open('autiview_qna.pickle', 'wb') as fs:
 
 		pickle.dump(docs, fs)
+	"""

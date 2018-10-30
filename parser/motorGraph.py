@@ -14,8 +14,8 @@ if __name__ == '__main__':
 	docs = list()
 	baseURL = 'http://www.motorgraph.com/news/articleList.html?page={}'
 	
-	for idx in range(1, 2):
-	#for idx in range(1, 700 + 1):
+	#for idx in range(1, 2):
+	for idx in range(1, 700 + 1):
 
 		page = urllib.request.urlopen(baseURL.format(idx))
 		soup = BeautifulSoup(page, 'lxml')
@@ -51,8 +51,8 @@ if __name__ == '__main__':
 	docs = list()
 	baseURL = 'https://c.motorgraph.com/index.php?mid=info&page={}'
 	
-	for idx in range(1, 2):
-	#for idx in range(1, 15 + 1):
+	#for idx in range(1, 2):
+	for idx in range(1, 15 + 1):
 
 		page = urllib.request.urlopen(baseURL.format(idx))
 		soup = BeautifulSoup(page, 'lxml')

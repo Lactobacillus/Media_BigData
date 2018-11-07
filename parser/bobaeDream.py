@@ -27,30 +27,35 @@ if __name__ == '__main__':
 
 	for docURL in docURLs:
 
-		comments = list()
+		try:
 
-		page = urllib.request.urlopen('http://www.bobaedream.co.kr' + docURL)
-		soup = BeautifulSoup(page, 'lxml')
-		
-		title = soup.find('div', class_ = 'writerProfile').find('strong').text.strip().split('[')[0]
-		time = soup.find('div', class_ = 'writerProfile').find('span').find_all('em')[3]
-		mainText = soup.find('div', class_ = 'bodyCont').text.strip().replace('\n', ' ').replace('\r', '')
+			comments = list()
 
-		soup = soup.find('div', id = 'cmt_list')
+			page = urllib.request.urlopen('http://www.bobaedream.co.kr' + docURL)
+			soup = BeautifulSoup(page, 'lxml')
+			
+			title = soup.find('div', class_ = 'writerProfile').find('strong').text.strip().split('[')[0]
+			time = soup.find('div', class_ = 'writerProfile').find('span').find_all('em')[3]
+			mainText = soup.find('div', class_ = 'bodyCont').text.strip().replace('\n', ' ').replace('\r', '')
 
-		# 댓글
-		if int(soup.find('span', class_ = 'comm2').text.replace('(', '').replace(')', '')) > 0:
+			soup = soup.find('div', id = 'cmt_list')
 
-			for li in soup.find('ul', id = 'cmt_reply').find_all('li'):
+			# 댓글
+			if int(soup.find('span', class_ = 'comm2').text.replace('(', '').replace(')', '')) > 0:
 
-				comments.append(li.find('dd').text.strip())
+				for li in soup.find('ul', id = 'cmt_reply').find_all('li'):
 
-		docs.append({'title' : title, 'time' : time, 'content' : mainText, 'reply' : comments})
+					comments.append(li.find('dd').text.strip())
+
+			docs.append({'title' : title, 'time' : time, 'content' : mainText, 'reply' : comments})
+
+		except:
+
+			pass
 
 	with open('bobaedream_board_national.pickle', 'wb') as fs:
 
 		pickle.dump(docs, fs)
-
 
 	# 수입차게시판
 	docURLs = list()
@@ -70,25 +75,31 @@ if __name__ == '__main__':
 
 	for docURL in docURLs:
 
-		comments = list()
+		try:
 
-		page = urllib.request.urlopen('http://www.bobaedream.co.kr' + docURL)
-		soup = BeautifulSoup(page, 'lxml')
-		
-		title = soup.find('div', class_ = 'writerProfile').find('strong').text.strip().split('[')[0]
-		time = soup.find('div', class_ = 'writerProfile').find('span').find_all('em')[3]
-		mainText = soup.find('div', class_ = 'bodyCont').text.strip().replace('\n', ' ').replace('\r', '')
+			comments = list()
 
-		soup = soup.find('div', id = 'cmt_list')
+			page = urllib.request.urlopen('http://www.bobaedream.co.kr' + docURL)
+			soup = BeautifulSoup(page, 'lxml')
+			
+			title = soup.find('div', class_ = 'writerProfile').find('strong').text.strip().split('[')[0]
+			time = soup.find('div', class_ = 'writerProfile').find('span').find_all('em')[3]
+			mainText = soup.find('div', class_ = 'bodyCont').text.strip().replace('\n', ' ').replace('\r', '')
 
-		# 댓글
-		if int(soup.find('span', class_ = 'comm2').text.replace('(', '').replace(')', '')) > 0:
+			soup = soup.find('div', id = 'cmt_list')
 
-			for li in soup.find('ul', id = 'cmt_reply').find_all('li'):
+			# 댓글
+			if int(soup.find('span', class_ = 'comm2').text.replace('(', '').replace(')', '')) > 0:
 
-				comments.append(li.find('dd').text.strip())
+				for li in soup.find('ul', id = 'cmt_reply').find_all('li'):
 
-		docs.append({'title' : title, 'time' : time, 'content' : mainText, 'reply' : comments})
+					comments.append(li.find('dd').text.strip())
+
+			docs.append({'title' : title, 'time' : time, 'content' : mainText, 'reply' : comments})
+
+		except:
+
+			pass
 
 	with open('bobaedream_board_import.pickle', 'wb') as fs:
 

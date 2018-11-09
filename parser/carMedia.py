@@ -19,8 +19,8 @@ if __name__ == '__main__':
 	docs = list()
 	baseURL = 'http://server2.carmedia.co.kr/index.php?mid=focus&page={}'
 	
-	for idx in range(1, 2):
-	#for idx in range(1, 566):
+	#for idx in range(1, 2):
+	for idx in range(1, 566):
 
 		page = urllib.request.urlopen(baseURL.format(idx))
 		soup = BeautifulSoup(page, 'lxml')

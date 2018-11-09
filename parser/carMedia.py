@@ -32,17 +32,6 @@ if __name__ == '__main__':
 
 	for docURL in docURLs:
 
-
-		"""
-		a = Article(docURL, language = 'ko')
-		a.download()
-		a.parse()
-
-		print(a.title)
-		print(a.date)
-		print(a.text)
-		"""
-
 		page = urllib.request.urlopen(docURL)
 		soup = BeautifulSoup(page, 'lxml')
 		

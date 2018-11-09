@@ -54,6 +54,6 @@ if __name__ == '__main__':
 
 			pass
 
-	with open('autiview_news.pickle', 'wb') as fs:
+	with open('autoview_news.pickle', 'wb') as fs:
 
 		pickle.dump(docs, fs)

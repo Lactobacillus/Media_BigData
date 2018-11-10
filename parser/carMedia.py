@@ -10,7 +10,6 @@ import sys
 import pickle
 import urllib.request
 from bs4 import BeautifulSoup
-from newspaper import Article
 
 if __name__ == '__main__':
 

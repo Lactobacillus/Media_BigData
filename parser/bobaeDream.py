@@ -8,7 +8,7 @@ import urllib.request
 from bs4 import BeautifulSoup
 
 if __name__ == '__main__':
-
+	"""
 	# 국산차게시판
 	docURLs = list()
 	docs = list()
@@ -35,7 +35,7 @@ if __name__ == '__main__':
 			soup = BeautifulSoup(page, 'lxml')
 			
 			title = soup.find('div', class_ = 'writerProfile').find('strong').text.strip().split('[')[0]
-			time = soup.find('div', class_ = 'writerProfile').find('span').find_all('em')[3]
+			time = soup.find('div', class_ = 'countGroup').find('span').find_all('em')[3]
 			mainText = soup.find('div', class_ = 'bodyCont').text.strip().replace('\n', ' ').replace('\r', '')
 
 			soup = soup.find('div', id = 'cmt_list')
@@ -56,14 +56,14 @@ if __name__ == '__main__':
 	with open('bobaedream_board_national.pickle', 'wb') as fs:
 
 		pickle.dump(docs, fs)
-
+	"""
 	# 수입차게시판
 	docURLs = list()
 	docs = list()
 	baseURL = 'http://www.bobaedream.co.kr/list?code=import&page={}'
 
 	#for idx in range(1, 2):
-	for idx in range(1, 4000 + 1):
+	for idx in range(1, 10 + 1):
 
 		page = urllib.request.urlopen(baseURL.format(idx))
 		soup = BeautifulSoup(page, 'lxml')
@@ -83,7 +83,7 @@ if __name__ == '__main__':
 			soup = BeautifulSoup(page, 'lxml')
 			
 			title = soup.find('div', class_ = 'writerProfile').find('strong').text.strip().split('[')[0]
-			time = soup.find('div', class_ = 'writerProfile').find('span').find_all('em')[3]
+			time = soup.find('div', class_ = 'countGroup').find('span').find_all('em')[3]
 			mainText = soup.find('div', class_ = 'bodyCont').text.strip().replace('\n', ' ').replace('\r', '')
 
 			soup = soup.find('div', id = 'cmt_list')
@@ -100,7 +100,11 @@ if __name__ == '__main__':
 		except:
 
 			pass
+	
+	with open('bobaedream_board_import_1_500.txt', 'w') as fs:
 
-	with open('bobaedream_board_import.pickle', 'wb') as fs:
+		fs.write(str(docs))
 
-		pickle.dump(docs, fs)
+	#with open('bobaedream_board_import_501_1000.pickle', 'wb') as fs:
+
+	#	pickle.dump(docs, fs)

@@ -8,7 +8,7 @@ import urllib.request
 from bs4 import BeautifulSoup
 
 if __name__ == '__main__':
-	"""
+	
 	# 국산차게시판
 	docURLs = list()
 	docs = list()
@@ -53,10 +53,10 @@ if __name__ == '__main__':
 
 			pass
 
-	with open('bobaedream_board_national.pickle', 'wb') as fs:
+	with open('bobaedream_board_national.txt', 'w') as fs:
 
-		pickle.dump(docs, fs)
-	"""
+		fs.write(str(docs))
+	
 	# 수입차게시판
 	docURLs = list()
 	docs = list()
@@ -103,10 +103,6 @@ if __name__ == '__main__':
 
 		print(len(docs))
 	
-	with open('bobaedream_board_import_3000_4000.txt', 'w') as fs:
+	with open('bobaedream_board_import.txt', 'w') as fs:
 
 		fs.write(str(docs))
-
-	#with open('bobaedream_board_import_501_1000.pickle', 'wb') as fs:
-
-	#	pickle.dump(docs, fs)

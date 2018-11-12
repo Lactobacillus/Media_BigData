@@ -35,7 +35,7 @@ if __name__ == '__main__':
 			soup = BeautifulSoup(page, 'lxml')
 			
 			title = soup.find('div', class_ = 'writerProfile').find('strong').text.strip().split('[')[0]
-			time = soup.find('div', class_ = 'countGroup').find('span').find_all('em')[3]
+			time = soup.find('span', class_ = 'countGroup').text[-20:-10]
 			mainText = soup.find('div', class_ = 'bodyCont').text.strip().replace('\n', ' ').replace('\r', '')
 
 			soup = soup.find('div', id = 'cmt_list')
@@ -62,8 +62,8 @@ if __name__ == '__main__':
 	docs = list()
 	baseURL = 'http://www.bobaedream.co.kr/list?code=import&page={}'
 
-	#for idx in range(1, 2):
-	for idx in range(1, 10 + 1):
+	for idx in range(1, 2):
+	#for idx in range(3001, 4000 + 1):
 
 		page = urllib.request.urlopen(baseURL.format(idx))
 		soup = BeautifulSoup(page, 'lxml')
@@ -83,7 +83,7 @@ if __name__ == '__main__':
 			soup = BeautifulSoup(page, 'lxml')
 			
 			title = soup.find('div', class_ = 'writerProfile').find('strong').text.strip().split('[')[0]
-			time = soup.find('div', class_ = 'countGroup').find('span').find_all('em')[3]
+			time = soup.find('span', class_ = 'countGroup').text[-20:-10]
 			mainText = soup.find('div', class_ = 'bodyCont').text.strip().replace('\n', ' ').replace('\r', '')
 
 			soup = soup.find('div', id = 'cmt_list')
@@ -97,11 +97,13 @@ if __name__ == '__main__':
 
 			docs.append({'title' : title, 'time' : time, 'content' : mainText, 'reply' : comments})
 
-		except:
+		except Exception as e:
 
-			pass
+			print('[error] ', str(e))
+
+		print(len(docs))
 	
-	with open('bobaedream_board_import_1_500.txt', 'w') as fs:
+	with open('bobaedream_board_import_3000_4000.txt', 'w') as fs:
 
 		fs.write(str(docs))
 

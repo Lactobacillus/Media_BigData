@@ -6,7 +6,7 @@ if __name__ == '__main__':
 
 	dataList = list()
 
-	for arg in sys.argv[1:]:
+	for arg in sys.argv[2:]:
 
 		print(arg)
 

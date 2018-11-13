@@ -8,7 +8,7 @@ if __name__ == '__main__':
 
 	for arg in sys.argv[1:]:
 
-		with open(arg, 'wb') as fs:
+		with open(arg, 'rb') as fs:
 
 			data = pickle.load(fs)
 

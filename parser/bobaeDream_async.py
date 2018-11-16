@@ -54,9 +54,11 @@ def parseArticle(html):
 
 				comments.append(li.find('dd').text.strip())
 
-		return {'title' : title, 'time' : time, 'content' : mainText, 'reply' : comments, 'vaild' : True}
+		return {'title' : title, 'time' : time, 'content' : mainText, 'reply' : comments, 'valid' : True}
 
-	except:
+	except Exception as e:
+
+		print(e)
 
 		return {'vaild' : False}
 
@@ -74,7 +76,7 @@ if __name__ == '__main__':
 
 		loop = asyncio.get_event_loop()
 		
-		for idx in range(1, 10):
+		for idx in range(1, 3):
 		#for idx in range(1, 25000 + 1):
 
 			task.append(asyncio.ensure_future(getOnePage(baseURL.format(idx))))
@@ -84,7 +86,7 @@ if __name__ == '__main__':
 				loop.run_until_complete(asyncio.wait(task))
 				sleep(2)
 
-		loop.close()
+		loop.run_until_complete(asyncio.wait(task))
 
 		docURLs = list(itertools.chain.from_iterable(Parallel(
 			n_jobs = multiprocessing.cpu_count())(delayed(parseURL)(page) for page in [t.result() for t in task])))
@@ -93,10 +95,12 @@ if __name__ == '__main__':
 
 			for docURL in docURLs:
 
-				fs.write(docURLs + '\n')
+				fs.write(docURL + '\n')
 
 	# 저장된 link 사용
 	else:
+
+		loop = asyncio.get_event_loop()
 
 		with open('bobaedream_board_national_links.txt', 'r') as fs:
 
@@ -106,8 +110,6 @@ if __name__ == '__main__':
 	if True:
 
 		task = list()
-
-		loop = asyncio.get_event_loop()
 
 		for idx, docURL in enumerate(docURLs):
 
@@ -119,10 +121,8 @@ if __name__ == '__main__':
 				sleep(2)
 
 		loop.run_until_complete(asyncio.wait(task))
-		loop.close()
 
-		docs = list(itertools.chain.from_iterable(Parallel(
-			n_jobs = multiprocessing.cpu_count())(delayed(parseArticle)(page) for page in [t.result() for t in task])))
+		docs = Parallel(n_jobs = multiprocessing.cpu_count())(delayed(parseArticle)(page) for page in [t.result() for t in task])
 		docs = [doc for doc in docs if doc['valid']]
 
 		with open('bobaedream_board_national.txt', 'w') as fs:

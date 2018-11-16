@@ -65,131 +65,135 @@ def parseArticle(html):
 if __name__ == '__main__':
 
 	# 국산차게시판
-	docURLs = list()
-	docHTMLs = list()
-	docs = list()
-	task = list()
-	baseURL = 'http://www.bobaedream.co.kr/list?code=national&page={}'
-
-	# link 다운받기
 	if True:
-
-		loop = asyncio.get_event_loop()
 		
-		for idx in range(1, 3):
-		#for idx in range(1, 25000 + 1):
-
-			task.append(asyncio.ensure_future(getOnePage(baseURL.format(idx))))
-
-			if idx % 100 == 0:
-
-				loop.run_until_complete(asyncio.wait(task))
-				sleep(2)
-
-		loop.run_until_complete(asyncio.wait(task))
-
-		docURLs = list(itertools.chain.from_iterable(Parallel(
-			n_jobs = multiprocessing.cpu_count())(delayed(parseURL)(page) for page in [t.result() for t in task])))
-
-		with open('bobaedream_board_national_links.txt', 'w') as fs:
-
-			for docURL in docURLs:
-
-				fs.write(docURL + '\n')
-
-	# 저장된 link 사용
-	else:
-
-		loop = asyncio.get_event_loop()
-
-		with open('bobaedream_board_national_links.txt', 'r') as fs:
-
-			docURLs = fs.readlines()
-
-	# 글 다운받기
-	if True:
-
+		docURLs = list()
+		docHTMLs = list()
+		docs = list()
 		task = list()
+		baseURL = 'http://www.bobaedream.co.kr/list?code=national&page={}'
 
-		for idx, docURL in enumerate(docURLs):
+		# link 다운받기
+		if True:
 
-			task.append(asyncio.ensure_future(getOnePage('http://www.bobaedream.co.kr' + docURL)))
+			loop = asyncio.get_event_loop()
+			
+			for idx in range(1, 3):
+			#for idx in range(0 + 1, 25000 + 1):
 
-			if idx % 100 == 0:
+				task.append(asyncio.ensure_future(getOnePage(baseURL.format(idx))))
 
-				loop.run_until_complete(asyncio.wait(task))
-				sleep(2)
+				if idx % 100 == 0:
 
-		loop.run_until_complete(asyncio.wait(task))
+					loop.run_until_complete(asyncio.wait(task))
+					sleep(2)
 
-		docs = Parallel(n_jobs = multiprocessing.cpu_count())(delayed(parseArticle)(page) for page in [t.result() for t in task])
-		docs = [doc for doc in docs if doc['valid']]
+			loop.run_until_complete(asyncio.wait(task))
 
-		with open('bobaedream_board_national.txt', 'w') as fs:
+			docURLs = list(itertools.chain.from_iterable(Parallel(
+				n_jobs = multiprocessing.cpu_count())(delayed(parseURL)(page) for page in [t.result() for t in task])))
 
-			fs.write(str(docs))
+			with open('bobaedream_board_national_links.txt', 'w') as fs:
+
+				for docURL in docURLs:
+
+					fs.write(docURL + '\n')
+
+		# 저장된 link 사용
+		else:
+
+			loop = asyncio.get_event_loop()
+
+			with open('bobaedream_board_national_links.txt', 'r') as fs:
+
+				docURLs = fs.readlines()
+
+		# 글 다운받기
+		if True:
+
+			task = list()
+
+			for idx, docURL in enumerate(docURLs):
+
+				task.append(asyncio.ensure_future(getOnePage('http://www.bobaedream.co.kr' + docURL)))
+
+				if idx % 100 == 0:
+
+					loop.run_until_complete(asyncio.wait(task))
+					sleep(2)
+
+			loop.run_until_complete(asyncio.wait(task))
+
+			docs = Parallel(n_jobs = multiprocessing.cpu_count())(delayed(parseArticle)(page) for page in [t.result() for t in task])
+			docs = [doc for doc in docs if doc['valid']]
+
+			with open('bobaedream_board_national.txt', 'w') as fs:
+
+				fs.write(str(docs))
 
 	# 수입차게시판
-	docURLs = list()
-	docHTMLs = list()
-	docs = list()
-	task = list()
-	baseURL = 'http://www.bobaedream.co.kr/list?code=import&page={}'
-
-	# link 다운받기
 	if True:
 
-		loop = asyncio.get_event_loop()
-		
-		for idx in range(1, 3):
-		#for idx in range(3001, 4000 + 1):
-
-			task.append(asyncio.ensure_future(getOnePage(baseURL.format(idx))))
-
-			if idx % 100 == 0:
-
-				loop.run_until_complete(asyncio.wait(task))
-				sleep(2)
-
-		loop.run_until_complete(asyncio.wait(task))
-
-		docURLs = list(itertools.chain.from_iterable(Parallel(
-			n_jobs = multiprocessing.cpu_count())(delayed(parseURL)(page) for page in [t.result() for t in task])))
-
-		with open('bobaedream_board_import_links.txt', 'w') as fs:
-
-			for docURL in docURLs:
-
-				fs.write(docURL + '\n')
-
-	# 저장된 link 사용
-	else:
-
-		loop = asyncio.get_event_loop()
-
-		with open('bobaedream_board_import_links.txt', 'r') as fs:
-
-			docURLs = fs.readlines()
-
-	# 글 다운받기
-	if True:
-
+		docURLs = list()
+		docHTMLs = list()
+		docs = list()
 		task = list()
+		baseURL = 'http://www.bobaedream.co.kr/list?code=import&page={}'
 
-		for idx, docURL in enumerate(docURLs):
+		# link 다운받기
+		if True:
 
-			task.append(asyncio.ensure_future(getOnePage('http://www.bobaedream.co.kr' + docURL)))
+			loop = asyncio.get_event_loop()
+			
+			for idx in range(1, 3):
+			#for idx in range(0 + 1, 4000 + 1):
 
-			if idx % 100 == 0:
+				task.append(asyncio.ensure_future(getOnePage(baseURL.format(idx))))
 
-				loop.run_until_complete(asyncio.wait(task))
-				sleep(2)
+				if idx % 100 == 0:
 
-		loop.run_until_complete(asyncio.wait(task))
+					loop.run_until_complete(asyncio.wait(task))
+					sleep(2)
 
-		docs = Parallel(n_jobs = multiprocessing.cpu_count())(delayed(parseArticle)(page) for page in [t.result() for t in task])
-		docs = [doc for doc in docs if doc['valid']]
+			loop.run_until_complete(asyncio.wait(task))
 
-		with open('bobaedream_board_import.txt', 'w') as fs:
+			docURLs = list(itertools.chain.from_iterable(Parallel(
+				n_jobs = multiprocessing.cpu_count())(delayed(parseURL)(page) for page in [t.result() for t in task])))
 
-			fs.write(str(docs))
+			with open('bobaedream_board_import_links.txt', 'w') as fs:
+
+				for docURL in docURLs:
+
+					fs.write(docURL + '\n')
+
+		# 저장된 link 사용
+		else:
+
+			loop = asyncio.get_event_loop()
+
+			with open('bobaedream_board_import_links.txt', 'r') as fs:
+
+				docURLs = fs.readlines()
+
+		# 글 다운받기
+		if True:
+
+			task = list()
+
+			for idx, docURL in enumerate(docURLs):
+
+				task.append(asyncio.ensure_future(getOnePage('http://www.bobaedream.co.kr' + docURL)))
+
+				if idx % 100 == 0:
+
+					loop.run_until_complete(asyncio.wait(task))
+					sleep(2)
+
+			loop.run_until_complete(asyncio.wait(task))
+
+			docs = Parallel(n_jobs = multiprocessing.cpu_count())(delayed(parseArticle)(page) for page in [t.result() for t in task])
+			docs = [doc for doc in docs if doc['valid']]
+
+			with open('bobaedream_board_import.txt', 'w') as fs:
+
+				fs.write(str(docs))

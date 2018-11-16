@@ -35,9 +35,30 @@ def parseURL(html):
 
 def parseArticle(html):
 
-	docs = list()
+	comments = list()
 
+	try:
 
+		soup = BeautifulSoup(html, 'lxml')
+
+		title = soup.find('div', class_ = 'writerProfile').find('strong').text.strip().split('[')[0]
+		time = soup.find('span', class_ = 'countGroup').text[-20:-10]
+		mainText = soup.find('div', class_ = 'bodyCont').text.strip().replace('\n', ' ').replace('\r', '')
+
+		soup = soup.find('div', id = 'cmt_list')
+
+		# 댓글
+		if int(soup.find('span', class_ = 'comm2').text.replace('(', '').replace(')', '')) > 0:
+
+			for li in soup.find('ul', id = 'cmt_reply').find_all('li'):
+
+				comments.append(li.find('dd').text.strip())
+
+		return {'title' : title, 'time' : time, 'content' : mainText, 'reply' : comments, 'vaild' : True}
+
+	except:
+
+		return {'vaild' : False}
 
 if __name__ == '__main__':
 
@@ -48,59 +69,62 @@ if __name__ == '__main__':
 	task = list()
 	baseURL = 'http://www.bobaedream.co.kr/list?code=national&page={}'
 
-	loop = asyncio.get_event_loop()
-	
-	for idx in range(1, 10):
-	#for idx in range(1, 25000 + 1):
+	# link 다운받기
+	if True:
 
-		task.append(asyncio.ensure_future(getOnePage(baseURL.format(idx))))
+		loop = asyncio.get_event_loop()
+		
+		for idx in range(1, 10):
+		#for idx in range(1, 25000 + 1):
 
-		if idx % 100 == 0:
+			task.append(asyncio.ensure_future(getOnePage(baseURL.format(idx))))
 
-			loop.run_until_complete(asyncio.wait(task))
-			sleep(2)
+			if idx % 100 == 0:
 
-	loop.close()
+				loop.run_until_complete(asyncio.wait(task))
+				sleep(2)
 
-	docURLs = list(itertools.chain.from_iterable(Parallel(
-		n_jobs = multiprocessing.cpu_count())(delayed(parseURL)(page) for page in [t.result() for t in task])))
+		loop.close()
 
+		docURLs = list(itertools.chain.from_iterable(Parallel(
+			n_jobs = multiprocessing.cpu_count())(delayed(parseURL)(page) for page in [t.result() for t in task])))
 
+		with open('bobaedream_board_national_links.txt', 'w') as fs:
 
-"""
+			for docURL in docURLs:
 
-	for docURL in docURLs:
+				fs.write(docURLs + '\n')
 
-		try:
+	# 저장된 link 사용
+	else:
 
-			comments = list()
+		with open('bobaedream_board_national_links.txt', 'r') as fs:
 
-			page = urllib.request.urlopen('http://www.bobaedream.co.kr' + docURL)
-			soup = BeautifulSoup(page, 'lxml')
-			
-			title = soup.find('div', class_ = 'writerProfile').find('strong').text.strip().split('[')[0]
-			time = soup.find('span', class_ = 'countGroup').text[-20:-10]
-			mainText = soup.find('div', class_ = 'bodyCont').text.strip().replace('\n', ' ').replace('\r', '')
+			docURLs = fs.readlines()
 
-			soup = soup.find('div', id = 'cmt_list')
+	# 글 다운받기
+	if True:
 
-			# 댓글
-			if int(soup.find('span', class_ = 'comm2').text.replace('(', '').replace(')', '')) > 0:
+		task = list()
 
-				for li in soup.find('ul', id = 'cmt_reply').find_all('li'):
+		loop = asyncio.get_event_loop()
 
-					comments.append(li.find('dd').text.strip())
+		for idx, docURL in enumerate(docURLs):
 
-			docs.append({'title' : title, 'time' : time, 'content' : mainText, 'reply' : comments})
+			task.append(asyncio.ensure_future(getOnePage('http://www.bobaedream.co.kr' + docURL)))
 
-		except:
+			if idx % 100 == 0:
 
-			pass
+				loop.run_until_complete(asyncio.wait(task))
+				sleep(2)
 
+		loop.run_until_complete(asyncio.wait(task))
+		loop.close()
 
+		docs = list(itertools.chain.from_iterable(Parallel(
+			n_jobs = multiprocessing.cpu_count())(delayed(parseArticle)(page) for page in [t.result() for t in task])))
+		docs = [doc for doc in docs if doc['valid']]
 
+		with open('bobaedream_board_national.txt', 'w') as fs:
 
-	with open('bobaedream_board_national.txt', 'w') as fs:
-
-		fs.write(str(docs))
-"""
+			fs.write(str(docs))

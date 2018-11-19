@@ -24,12 +24,18 @@ def parseURL(html):
 
 	docURLs = list()
 
-	soup = BeautifulSoup(html, 'lxml')
-	soup = soup.find_all('tr', itemtype = 'http://schema.org/Article')
+	try:
 
-	for t in soup:
+		soup = BeautifulSoup(html, 'lxml')
+		soup = soup.find_all('tr', itemtype = 'http://schema.org/Article')
 
-		docURLs.append(t.find('td', class_ = 'pl14').find('a')['href'])
+		for t in soup:
+
+			docURLs.append(t.find('td', class_ = 'pl14').find('a')['href'])
+
+	except:
+
+		pass
 
 	return docURLs
 

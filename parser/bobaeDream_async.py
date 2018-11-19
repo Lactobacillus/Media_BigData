@@ -33,9 +33,9 @@ def parseURL(html):
 
 			docURLs.append(t.find('td', class_ = 'pl14').find('a')['href'])
 
-	except:
+	except Exception as e:
 
-		pass
+		print(e)
 
 	return docURLs
 
@@ -162,6 +162,8 @@ if __name__ == '__main__':
 					sleep(2)
 
 			loop.run_until_complete(asyncio.wait(task))
+
+			print([t.result() for t in task])
 
 			docURLs = list(itertools.chain.from_iterable(Parallel(
 				n_jobs = multiprocessing.cpu_count())(delayed(parseURL)(page) for page in [t.result() for t in task])))
